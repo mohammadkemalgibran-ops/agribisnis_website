@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galeri & Pesan Pengunjung</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Galeri & Kontak - Program Studi Agribisnis</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,46 +13,16 @@
       padding: 0;
       color: #333;
     }
-    header {
-      background: #b8860b;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-    }
-    nav {
-      background: #f1c232;
-      text-align: center;
-      padding: 10px;
-    }
-    nav a {
-      text-decoration: none;
-      color: black;
-      font-weight: bold;
-      margin: 0 10px;
-    }
-    nav a:hover {
-      color: white;
-    }
-    footer {
-      background: #b8860b;
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-      font-weight: bold;
-      margin-top: 30px;
-    }
-    .container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 0 20px;
-    }
+
     .gallery {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      margin-bottom: 30px;
+      margin: 40px auto;
+      max-width: 1000px;
     }
+
     .gallery figure {
       width: 250px;
       height: 180px;
@@ -59,15 +30,24 @@
       border-radius: 10px;
       border: 3px solid #b8860b;
     }
+
     .gallery img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.3s;
     }
+
     .gallery img:hover {
       transform: scale(1.05);
     }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
     form {
       display: flex;
       flex-direction: column;
@@ -76,12 +56,14 @@
       border-radius: 10px;
       border: 2px solid #b8860b;
     }
+
     input, textarea {
       margin-bottom: 10px;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
+
     button {
       background: #b8860b;
       color: white;
@@ -90,9 +72,11 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     button:hover {
       background: #a67600;
     }
+
     .pesan-list {
       margin-top: 20px;
       background: #fff7d1;
@@ -100,6 +84,7 @@
       border-radius: 10px;
       border: 2px solid #b8860b;
     }
+
     .pesan-item {
       background: white;
       margin-bottom: 8px;
@@ -107,6 +92,7 @@
       border-radius: 8px;
       border: 1px solid #b8860b;
     }
+
     .popup {
       display: none;
       position: fixed;
@@ -121,30 +107,45 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
       z-index: 999;
     }
+
+    footer {
+      background: #b8860b;
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      font-weight: bold;
+      margin-top: 40px;
+    }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>Galeri & Pesan Pengunjung</h1>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="images/logo uin.png" alt="Logo UIN" class="logo" />
+        <div>
+          <h1>Program Studi Agribisnis</h1>
+          <p class="sub">Fakultas Sains dan Teknologi • Universitas Islam Negeri</p>
+        </div>
+      </div>
+      <button id="nav-toggle-4" class="nav-toggle" aria-label="Menu">☰</button>
+      <nav class="main-nav" id="main-nav-4">
+        <a href="index.html">Beranda</a>
+        <a href="profil.html">Profil</a>
+        <a href="kurikulum.html">Kurikulum</a>
+        <a href="galeri.html" class="active">Galeri & Kontak</a>
+      </nav>
+    </div>
   </header>
 
-  <nav>
-    <a href="index.html">Profil</a>
-    <a href="kurikulum.html">Kurikulum</a>
-    <a href="galeri.html">Galeri</a>
-    <a href="kontak.html">Kontak</a>
-  </nav>
-
-  <main class="container main">
-    <!-- Galeri -->
+  <main>
     <section class="gallery">
       <figure><img src="images/foto1.jpeg" alt="Foto kegiatan 1" /></figure>
       <figure><img src="images/foto2.jpg" alt="Foto kegiatan 2" /></figure>
       <figure><img src="images/foto3.jpeg" alt="Foto kegiatan 3" /></figure>
     </section>
 
-    <!-- Form Pesan -->
     <h2>Kirim Pesan</h2>
     <form id="contactForm">
       <label>Nama:</label>
@@ -162,8 +163,9 @@
     <div id="pesanList" class="pesan-list"></div>
   </main>
 
-  <!-- Footer satu di bawah -->
-  <footer>Fakultas Sains dan Teknologi - Universitas Islam Negeri</footer>
+  <footer>
+    Fakultas Sains dan Teknologi - Universitas Islam Negeri
+  </footer>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -177,4 +179,43 @@
       projectId: "agribisniswebsite",
       storageBucket: "agribisniswebsite.appspot.com",
       messagingSenderId: "XXXXXXXXXXXX",
-      appId: "1:XXXX
+      appId: "1:XXXXXXXXXXXX:web:XXXXXXXXXXXX"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const form = document.getElementById("contactForm");
+    const popup = document.getElementById("popup");
+    const pesanList = document.getElementById("pesanList");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nama = document.getElementById("nama").value;
+      const email = document.getElementById("email").value;
+      const pesan = document.getElementById("pesan").value;
+
+      firebase.database().ref("pesan").push({
+        nama: nama,
+        email: email,
+        pesan: pesan,
+        waktu: new Date().toLocaleString()
+      });
+
+      popup.style.display = "block";
+      setTimeout(() => popup.style.display = "none", 3000);
+      form.reset();
+    });
+
+    firebase.database().ref("pesan").on("value", (snapshot) => {
+      pesanList.innerHTML = "";
+      snapshot.forEach((child) => {
+        const data = child.val();
+        const div = document.createElement("div");
+        div.classList.add("pesan-item");
+        div.innerHTML = `<b>${data.nama}</b> (${data.email})<br>${data.pesan}<br><small>${data.waktu}</small>`;
+        pesanList.prepend(div);
+      });
+    });
+  </script>
+</body>
+</html>
