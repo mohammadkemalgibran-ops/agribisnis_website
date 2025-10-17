@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Galeri & Pesan Pengunjung</title>
   <style>
     body {
@@ -12,37 +12,39 @@
       padding: 0;
       color: #333;
     }
-
     header {
       background: #b8860b;
       color: white;
       text-align: center;
       padding: 15px 0;
     }
-
     nav {
       background: #f1c232;
       text-align: center;
       padding: 10px;
     }
-
     nav a {
       text-decoration: none;
       color: black;
       font-weight: bold;
       margin: 0 10px;
     }
-
     nav a:hover {
       color: white;
     }
-
+    footer {
+      background: #b8860b;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-weight: bold;
+      margin-top: 30px;
+    }
     .container {
       max-width: 900px;
       margin: 20px auto;
       padding: 0 20px;
     }
-
     .gallery {
       display: flex;
       flex-wrap: wrap;
@@ -50,7 +52,6 @@
       justify-content: center;
       margin-bottom: 30px;
     }
-
     .gallery figure {
       width: 250px;
       height: 180px;
@@ -58,18 +59,15 @@
       border-radius: 10px;
       border: 3px solid #b8860b;
     }
-
     .gallery img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.3s;
     }
-
     .gallery img:hover {
       transform: scale(1.05);
     }
-
     form {
       display: flex;
       flex-direction: column;
@@ -78,14 +76,12 @@
       border-radius: 10px;
       border: 2px solid #b8860b;
     }
-
     input, textarea {
       margin-bottom: 10px;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-
     button {
       background: #b8860b;
       color: white;
@@ -94,11 +90,9 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
     button:hover {
       background: #a67600;
     }
-
     .pesan-list {
       margin-top: 20px;
       background: #fff7d1;
@@ -106,7 +100,6 @@
       border-radius: 10px;
       border: 2px solid #b8860b;
     }
-
     .pesan-item {
       background: white;
       margin-bottom: 8px;
@@ -114,7 +107,6 @@
       border-radius: 8px;
       border: 1px solid #b8860b;
     }
-
     .popup {
       display: none;
       position: fixed;
@@ -145,7 +137,7 @@
   </nav>
 
   <main class="container main">
-    <!-- Galeri Foto -->
+    <!-- Galeri -->
     <section class="gallery">
       <figure><img src="images/foto1.jpeg" alt="Foto kegiatan 1" /></figure>
       <figure><img src="images/foto2.jpg" alt="Foto kegiatan 2" /></figure>
@@ -156,9 +148,9 @@
     <h2>Kirim Pesan</h2>
     <form id="contactForm">
       <label>Nama:</label>
-      <input type="text" id="nama" required />
+      <input type="text" id="nama" required>
       <label>Email:</label>
-      <input type="email" id="email" required />
+      <input type="email" id="email" required>
       <label>Pesan:</label>
       <textarea id="pesan" required></textarea>
       <button type="submit">Kirim</button>
@@ -170,12 +162,14 @@
     <div id="pesanList" class="pesan-list"></div>
   </main>
 
+  <!-- Footer satu di bawah -->
+  <footer>Fakultas Sains dan Teknologi - Universitas Islam Negeri</footer>
+
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-    // GANTI KONFIGURASI DI SINI
     const firebaseConfig = {
       apiKey: "ISI_API_KEY_KAMU",
       authDomain: "agribisniswebsite.firebaseapp.com",
@@ -183,43 +177,4 @@
       projectId: "agribisniswebsite",
       storageBucket: "agribisniswebsite.appspot.com",
       messagingSenderId: "XXXXXXXXXXXX",
-      appId: "1:XXXXXXXXXXXX:web:XXXXXXXXXXXX"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    const form = document.getElementById("contactForm");
-    const popup = document.getElementById("popup");
-    const pesanList = document.getElementById("pesanList");
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const nama = document.getElementById("nama").value;
-      const email = document.getElementById("email").value;
-      const pesan = document.getElementById("pesan").value;
-
-      firebase.database().ref("pesan").push({
-        nama: nama,
-        email: email,
-        pesan: pesan,
-        waktu: new Date().toLocaleString()
-      });
-
-      popup.style.display = "block";
-      setTimeout(() => popup.style.display = "none", 3000);
-      form.reset();
-    });
-
-    firebase.database().ref("pesan").on("value", (snapshot) => {
-      pesanList.innerHTML = "";
-      snapshot.forEach((child) => {
-        const data = child.val();
-        const div = document.createElement("div");
-        div.classList.add("pesan-item");
-        div.innerHTML = `<b>${data.nama}</b> (${data.email})<br>${data.pesan}<br><small>${data.waktu}</small>`;
-        pesanList.prepend(div);
-      });
-    });
-  </script>
-</body>
-</html>
+      appId: "1:XXXX
