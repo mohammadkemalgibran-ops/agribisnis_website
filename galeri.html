@@ -33,7 +33,7 @@
       <figure><img src="images/foto3.jpeg" alt="Foto kegiatan 3" /></figure>
     </section>
 
-   <section class="contact">
+  <section class="contact">
   <h2>Hubungi Kami</h2>
   <form id="contactForm">
     <label>Nama:</label>
@@ -54,52 +54,79 @@
   <div id="pesanList" class="pesan-list"></div>
 </section>
 
-<script>
+<!-- Firebase Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD1ExaBH0FfMOqprISJKYw_aWbUMRP5IpY",
+    authDomain: "agribisniswebsite.firebaseapp.com",
+    projectId: "agribisniswebsite",
+    storageBucket: "agribisniswebsite.firebasestorage.app",
+    messagingSenderId: "214873470397",
+    appId: "1:214873470397:web:7808ba9f851adcd1338ed4",
+    measurementId: "G-NN8HGJXHGR"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
   const form = document.getElementById("contactForm");
   const popup = document.getElementById("popup");
   const popupMessage = document.getElementById("popupMessage");
   const pesanList = document.getElementById("pesanList");
 
-  // Muat pesan dari localStorage
-  window.onload = function() {
-    const storedMessages = JSON.parse(localStorage.getItem("pesanData")) || [];
-    storedMessages.forEach(pesan => tampilkanPesan(pesan));
-  };
+  // Tampilkan pop-up
+  function showPopup(text) {
+    popupMessage.textContent = text;
+    popup.style.display = "block";
+    setTimeout(() => popup.style.display = "none", 3000);
+  }
 
-  // Saat form dikirim
-  form.addEventListener("submit", function(e) {
+  // Ambil semua pesan dari Firestore
+  async function loadMessages() {
+    pesanList.innerHTML = "";
+    const q = query(collection(db, "pesanWebsite"), orderBy("waktu", "desc"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      tampilkanPesan(data);
+    });
+  }
+
+  // Tambahkan pesan baru
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const nama = document.getElementById("nama").value;
     const email = document.getElementById("email").value;
     const pesan = document.getElementById("pesan").value;
 
-    const pesanBaru = { nama, email, pesan };
-
-    // Simpan ke localStorage
-    const pesanData = JSON.parse(localStorage.getItem("pesanData")) || [];
-    pesanData.unshift(pesanBaru);
-    localStorage.setItem("pesanData", JSON.stringify(pesanData));
-
-    // Tampilkan di halaman
-    tampilkanPesan(pesanBaru);
-
-    // Tampilkan pop-up
-    popupMessage.textContent = "Terima kasih, " + nama + "! Pesan kamu sudah terkirim.";
-    popup.style.display = "block";
-    setTimeout(() => popup.style.display = "none", 3000);
-
-    // Reset form
-    form.reset();
+    try {
+      await addDoc(collection(db, "pesanWebsite"), {
+        nama,
+        email,
+        pesan,
+        waktu: new Date()
+      });
+      tampilkanPesan({ nama, email, pesan });
+      showPopup("Terima kasih, " + nama + "! Pesan kamu sudah terkirim.");
+      form.reset();
+    } catch (err) {
+      showPopup("Gagal mengirim pesan: " + err.message);
+    }
   });
 
-  // Fungsi tampilkan pesan
+  // Fungsi tampilkan pesan di halaman
   function tampilkanPesan(pesan) {
     const newMessage = document.createElement("div");
     newMessage.classList.add("pesan-item");
     newMessage.innerHTML = `<b>${pesan.nama}</b> (${pesan.email})<br>${pesan.pesan}`;
     pesanList.prepend(newMessage);
   }
+
+  // Jalankan saat halaman dimuat
+  window.onload = loadMessages;
 </script>
 
 <style>
@@ -141,6 +168,7 @@
   }
 </style>
 
+
     </section>
   </main>
 
@@ -157,4 +185,5 @@
 </script>
 </body>
 </html>
+
 
